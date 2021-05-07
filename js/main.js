@@ -1,26 +1,28 @@
 
 
 
-let suit = ["spades", "hearts", "diamonds", "clubs"]
-let value = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "king", "queen", "ace" ];
-var cards = [];
-var card = {}
-for (var suitIndex = 0; suitIndex < suit.length; suitIndex++){
-  for( var valueIndex = 0; valueIndex < value.length; valueIndex++) {
+// let suit = ["spades", "hearts", "diamonds", "clubs"]
+// let value = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "king", "queen", "ace" ];
+// var cards = [];
+// var card = {}
+// for (var suitIndex = 0; suitIndex < suit.length; suitIndex++){
+//   for( var valueIndex = 0; valueIndex < value.length; valueIndex++) {
     
-    card.suit = suit[suitIndex];
-    card.value = value[valueIndex];
-    card.url = `images/${value[valueIndex]}_of_${suit[suitIndex]}.png`;
-    cards.push(card);
-    card = {};
-  }
-}
+//     card.suit = suit[suitIndex];
+//     card.value = value[valueIndex];
+//     card.url = `images/${value[valueIndex]}_of_${suit[suitIndex]}.png`;
+//     cards.push(card);
+//     card = {};
+//   }
+// }
 // console.log(cards);
 
 /**
  * Randomize array element order in-place.
  * Using Durstenfeld shuffle algorithm.
  */
+ var cards = [];
+
 
  function shuffleArray(cards) {
     for (var i = cards.length - 1; i > 0; i--) {
@@ -33,7 +35,25 @@ for (var suitIndex = 0; suitIndex < suit.length; suitIndex++){
 }
 
 
+function createDeck(){
+    let suit = ["spades", "hearts", "diamonds", "clubs"]
+    let value = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "king", "queen", "ace" ];
+   
+    var card = {}
+    for (var suitIndex = 0; suitIndex < suit.length; suitIndex++){
+      for( var valueIndex = 0; valueIndex < value.length; valueIndex++) {
+        
+        card.suit = suit[suitIndex];
+        card.value = value[valueIndex];
+        card.url = `images/${value[valueIndex]}_of_${suit[suitIndex]}.png`;
+        cards.push(card);
+        card = {};
+      }
+    }
 
+}
+
+createDeck()
 
 let dealerHand = []
 let playerHand = []
@@ -90,7 +110,7 @@ dealButton.addEventListener('click', (e)=>{
            
             playerHandContainer.appendChild(img) 
 
-           
+    
     }
     dPoints = dealerPoints()
     document.getElementById('dtotal').innerHTML = 'Dealer: ' + dPoints
@@ -103,7 +123,7 @@ dealButton.addEventListener('click', (e)=>{
 
     check()
     document.getElementById("deal-button").disabled = true;
-    document.getElementById('messages2').innerHTML = 'Press "Hit" or "Stand" to continue'
+    document.getElementById('messages2').innerHTML = 'Press "Hit" or "Stand" to continue or "Restart"'
 
 })
 
@@ -178,6 +198,8 @@ function playerPoints(){
                     playerHand[i].value = 10;
                 if (playerHand[i].value == "ace")
                     playerHand[i].value = 11;
+                if (playerHand[i].value == "ace" && pPoints + 10 < 21)
+                    playerHand[i].value = 1;
                 
                 total = total + parseInt(playerHand[i].value)
         }
@@ -220,6 +242,12 @@ function check() {
     }
     else if (pPoints == 21) {
         document.getElementById('messages').innerHTML = 'You\'ve hit Blackjack! You win! 🤩' 
+        document.getElementById("hit-button").disabled = true;
+        document.getElementById("stand-button").disabled = true;
+        document.getElementById('messages3').innerHTML = 'Press "Restart" button to start a new game'
+    }
+    else if(pPoints == 20 && dPoints == 20){
+        document.getElementById('messages').innerHTML = 'You\'ve hit a tie' 
         document.getElementById("hit-button").disabled = true;
         document.getElementById("stand-button").disabled = true;
         document.getElementById('messages3').innerHTML = 'Press "Restart" button to start a new game'
@@ -285,15 +313,16 @@ function restart(){
     document.getElementById('dtotal').innerHTML = 'Dealer: ' + dPoints
     console.log(dPoints)
     
-    
+    createDeck()
 }
 
 restartButton.addEventListener('click', (e)=>{
     pPoints = dPoints = 0
     restart()
     console.log('new game?')
-    
+    createDeck()
 })
+console.log(object);
 
 // window.addEventListener('DOMContentLoaded', function() {
 //     // Execute after page load
